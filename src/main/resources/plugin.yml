@@ -4,3 +4,25 @@ main: de.jakomi1.betterBan.BetterBan
 api-version: '1.21'
 prefix: ServerModlist
 authors: [ Jakomi1 ]
+commands:
+  ban:
+    permission: betterban.ban
+  kick:
+    permission: betterban.kick
+  tempban:
+    permission: betterban.tempban
+  unban:
+    permission: betterban.unban
+  banlist:
+    permission: betterban.banlist
+permissions:
+  betterban.ban:
+    default: op
+  betterban.kick:
+    default: op
+  betterban.tempban:
+    default: op
+  betterban.unban:
+    default: op
+  betterban.banlist:
+    default: op
