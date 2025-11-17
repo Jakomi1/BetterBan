@@ -15,6 +15,8 @@ import javax.xml.crypto.Data;
 import java.io.File;
 import java.util.Objects;
 
+import static de.jakomi1.betterBan.utils.ConfigUtils.loadConfig;
+
 public final class BetterBan extends JavaPlugin {
     public static final Component chatPrefix = Component.text("[", NamedTextColor.GRAY)
             .append(Component.text("BB", NamedTextColor.DARK_RED))
@@ -25,6 +27,7 @@ public final class BetterBan extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         dataFolder = getDataFolder();
+        loadConfig();
         if (!dataFolder.exists()) {
             if (dataFolder.mkdirs()) {
                 getLogger().info("Created plugin folder: " + dataFolder.getPath());
