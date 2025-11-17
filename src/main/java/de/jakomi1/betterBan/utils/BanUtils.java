@@ -1,6 +1,5 @@
 package de.jakomi1.betterBan.utils;
 
-
 import de.jakomi1.betterBan.database.Database;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -10,12 +9,11 @@ import java.util.*;
 
 import static de.jakomi1.betterBan.BetterBan.chatPrefix;
 
-
 public final class BanUtils {
 
     private static final Component PREFIX = chatPrefix;
 
-    // Cache für Bans: UUID -> BanData
+    // Cache for bans: UUID -> BanData
     private static final Map<UUID, BanData> banCache = new HashMap<>();
 
     private BanUtils() {}
@@ -51,7 +49,7 @@ public final class BanUtils {
                 );
             """);
 
-            // Cache initial laden
+            // Load cache initially
             loadCache();
 
         } catch (SQLException e) {
@@ -94,7 +92,7 @@ public final class BanUtils {
             ps.setString(3, reason);
             ps.executeUpdate();
 
-            // Cache aktualisieren
+            // Update cache
             banCache.put(uuid, new BanData(endTimestamp, reason));
 
         } catch (SQLException e) {
@@ -117,7 +115,7 @@ public final class BanUtils {
             ps.setString(1, uuid.toString());
             ps.executeUpdate();
 
-            // Cache entfernen
+            // Remove from cache
             banCache.remove(uuid);
 
         } catch (SQLException e) {
@@ -166,7 +164,7 @@ public final class BanUtils {
             ps.setLong(1, now);
             ps.executeUpdate();
 
-            // Cache bereinigen
+            // Clean cache
             banCache.entrySet().removeIf(e -> e.getValue().endTimestamp != -1 && e.getValue().endTimestamp < now);
 
         } catch (SQLException e) {
@@ -180,21 +178,21 @@ public final class BanUtils {
         Long end = getEnd(uuid);
         String reason = getReason(uuid);
 
-        if (end == null) return PREFIX.append(Component.text("Du bist nicht gebannt.", NamedTextColor.GREEN));
+        if (end == null) return PREFIX.append(Component.text("You are not banned.", NamedTextColor.GREEN));
 
         boolean permanent = end == -1;
         Component base = permanent
-                ? PREFIX.append(Component.text("Du bist permanent gebannt!", NamedTextColor.RED))
-                : PREFIX.append(Component.text("Du bist für " + formatDuration(end - System.currentTimeMillis()) + " gebannt!", NamedTextColor.RED));
+                ? PREFIX.append(Component.text("You are permanently banned!", NamedTextColor.RED))
+                : PREFIX.append(Component.text("You are banned for " + formatDuration(end - System.currentTimeMillis()) + "!", NamedTextColor.RED));
 
         if (reason != null && !reason.isBlank())
-            base = base.append(Component.text("\nGrund: " + reason, NamedTextColor.GRAY));
+            base = base.append(Component.text("\nReason: " + reason, NamedTextColor.GRAY));
 
         return base;
     }
 
     public static String formatDuration(long millis) {
-        if (millis <= 0) return "0 Sekunden";
+        if (millis <= 0) return "0 seconds";
         long totalSeconds = millis / 1000;
         long days = totalSeconds / 86400;
         long hours = (totalSeconds % 86400) / 3600;
@@ -202,10 +200,10 @@ public final class BanUtils {
         long seconds = totalSeconds % 60;
 
         StringBuilder sb = new StringBuilder();
-        if (days > 0) sb.append(days).append(days == 1 ? " Tag " : " Tage ");
-        if (hours > 0) sb.append(hours).append(hours == 1 ? " Stunde " : " Stunden ");
-        if (minutes > 0) sb.append(minutes).append(minutes == 1 ? " Minute " : " Minuten ");
-        if (seconds > 0) sb.append(seconds).append(seconds == 1 ? " Sekunde " : " Sekunden ");
+        if (days > 0) sb.append(days).append(days == 1 ? " day " : " days ");
+        if (hours > 0) sb.append(hours).append(hours == 1 ? " hour " : " hours ");
+        if (minutes > 0) sb.append(minutes).append(minutes == 1 ? " minute " : " minutes ");
+        if (seconds > 0) sb.append(seconds).append(seconds == 1 ? " second " : " seconds ");
         return sb.toString().trim();
     }
 

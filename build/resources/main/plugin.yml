@@ -1,6 +1,0 @@
-name: BetterBan
-version: '1.0.0'
-main: de.jakomi1.betterBan.BetterBan
-api-version: '1.21'
-prefix: ServerModlist
-authors: [ Jakomi1 ]

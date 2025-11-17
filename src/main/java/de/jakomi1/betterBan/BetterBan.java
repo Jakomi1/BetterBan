@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public final class BetterBan extends JavaPlugin {
     public static final Component chatPrefix = Component.text("[", NamedTextColor.GRAY)
-            .append(Component.text("RC", NamedTextColor.AQUA))
+            .append(Component.text("BB", NamedTextColor.DARK_RED))
             .append(Component.text("] ", NamedTextColor.GRAY));
     public static Plugin plugin;
     public static File dataFolder;

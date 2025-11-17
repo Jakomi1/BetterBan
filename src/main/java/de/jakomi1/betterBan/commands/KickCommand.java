@@ -1,5 +1,6 @@
 package de.jakomi1.betterBan.commands;
 
+import de.jakomi1.betterBan.utils.DiscordUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;

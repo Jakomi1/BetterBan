@@ -16,11 +16,11 @@ public class DiscordUtils {
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     /**
-     * Sendet eine einfache Nachricht ohne Styling an Discord (asynchron).
+     * Sends a simple message without styling to Discord (asynchronously).
      */
     public static void sendMessage(String content) {
         if (content == null || content.isEmpty()) {
-            Bukkit.getLogger().warning("Discord-Webhook: Nachricht ist leer, wird nicht gesendet!");
+            Bukkit.getLogger().warning("Discord webhook: message is empty, not sending!");
             return;
         }
 
@@ -30,21 +30,23 @@ public class DiscordUtils {
                 String jsonPayload = "{\"content\":\"" + escaped + "\"}";
                 sendWebhook(jsonPayload);
             } catch (Exception e) {
-                Bukkit.getLogger().severe("Fehler beim Senden des Discord-Webhooks:");
+                Bukkit.getLogger().severe("Error sending Discord webhook:");
                 e.printStackTrace();
             }
         });
     }
+
     public static void sendMessageWithTime(String content) {
         String timeStamped = "[" + LocalTime.now().format(TIME_FORMAT) + "] " + content;
         sendMessage(timeStamped);
     }
+
     /**
-     * Sendet eine stylische Embed-Nachricht mit Aqua [CRAT] Titel (asynchron).
+     * Sends a styled embed message with Aqua [CRAT] title (asynchronously).
      */
     public static void sendStyledMessage(String content) {
         if (content == null || content.isEmpty()) {
-            Bukkit.getLogger().warning("Discord-Webhook: Nachricht ist leer, wird nicht gesendet!");
+            Bukkit.getLogger().warning("Discord webhook: message is empty, not sending!");
             return;
         }
 
@@ -59,18 +61,18 @@ public class DiscordUtils {
                         + "}";
                 sendWebhook(jsonPayload);
             } catch (Exception e) {
-                Bukkit.getLogger().severe("Fehler beim Senden des Discord-Webhooks:");
+                Bukkit.getLogger().severe("Error sending Discord webhook:");
                 e.printStackTrace();
             }
         });
     }
 
     /**
-     * Sendet eine Embed-Nachricht mit benutzerdefinierter Farbe (asynchron).
+     * Sends an embed message with a custom color (asynchronously).
      */
     public static void sendColoredMessage(String content, int color) {
         if (content == null || content.isEmpty()) {
-            Bukkit.getLogger().warning("Discord-Webhook: Nachricht ist leer, wird nicht gesendet!");
+            Bukkit.getLogger().warning("Discord webhook: message is empty, not sending!");
             return;
         }
 
@@ -85,18 +87,18 @@ public class DiscordUtils {
                         + "}";
                 sendWebhook(jsonPayload);
             } catch (Exception e) {
-                Bukkit.getLogger().severe("Fehler beim Senden des Discord-Webhooks:");
+                Bukkit.getLogger().severe("Error sending Discord webhook:");
                 e.printStackTrace();
             }
         });
     }
 
     /**
-     * Hilfsmethode zum Senden eines JSON-Payloads an Discord.
-     * Führt eine Netzwerkoperation aus — deshalb nur von einem asynchronen Thread aufrufen.
+     * Helper method to send a JSON payload to Discord.
+     * Performs a network operation — should only be called from an asynchronous thread.
      */
     private static void sendWebhook(String jsonPayload) throws Exception {
-        if(!ConfigUtils.isWebhookEnabled()) return;
+        if (!ConfigUtils.isWebhookEnabled()) return;
         URL url = new URL(ConfigUtils.getWebhook());
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -113,7 +115,7 @@ public class DiscordUtils {
 
         int responseCode = connection.getResponseCode();
         if (responseCode != 204) {
-            Bukkit.getLogger().severe("Discord-Webhook Error: HTTP " + responseCode);
+            Bukkit.getLogger().severe("Discord webhook error: HTTP " + responseCode);
         }
     }
 
