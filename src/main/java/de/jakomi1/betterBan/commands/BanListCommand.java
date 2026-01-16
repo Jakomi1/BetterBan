@@ -1,14 +1,13 @@
 package de.jakomi1.betterBan.commands;
 
 import de.jakomi1.betterBan.utils.BanUtils;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.ChatColor;
 
 import java.util.Map;
 import java.util.UUID;
@@ -18,10 +17,10 @@ import static de.jakomi1.betterBan.BetterBan.chatPrefix;
 public class BanListCommand implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender,
-                             @NotNull Command command,
-                             @NotNull String label,
-                             @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender,
+                             Command command,
+                             String label,
+                             String[] args) {
 
         // Automatically remove old/expired bans
         BanUtils.clearExpiredBans();
@@ -29,11 +28,11 @@ public class BanListCommand implements CommandExecutor {
         Map<UUID, Map<String, Object>> bans = BanUtils.getAllBans();
 
         if (bans.isEmpty()) {
-            sender.sendMessage(chatPrefix.append(Component.text("No players are banned.", NamedTextColor.GRAY)));
+            sender.sendMessage(chatPrefix + ChatColor.GRAY + "No players are banned.");
             return true;
         }
 
-        sender.sendMessage(chatPrefix.append(Component.text("Banned players:", NamedTextColor.YELLOW)));
+        sender.sendMessage(chatPrefix + ChatColor.YELLOW + "Banned players:");
 
         for (Map.Entry<UUID, Map<String, Object>> entry : bans.entrySet()) {
             UUID uuid = entry.getKey();
@@ -53,10 +52,10 @@ public class BanListCommand implements CommandExecutor {
                 suffix = BanUtils.formatDuration(rem);
             }
 
-            sender.sendMessage(Component.text(name + " >> " + suffix, NamedTextColor.GRAY));
+            sender.sendMessage(ChatColor.GRAY + name + " >> " + suffix);
 
             if (reason != null && !reason.isBlank()) {
-                sender.sendMessage(Component.text("-> Reason: " + reason, NamedTextColor.DARK_GRAY));
+                sender.sendMessage(ChatColor.DARK_GRAY + "-> Reason: " + reason);
             }
         }
 

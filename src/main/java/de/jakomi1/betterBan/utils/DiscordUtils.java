@@ -1,5 +1,6 @@
 package de.jakomi1.betterBan.utils;
 
+import de.jakomi1.betterBan.scheduler.Scheduler;
 import org.bukkit.Bukkit;
 
 import java.io.OutputStream;
@@ -10,6 +11,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import static de.jakomi1.betterBan.BetterBan.plugin;
+import static de.jakomi1.betterBan.scheduler.Scheduler.runAsync;
 
 public class DiscordUtils {
 
@@ -119,7 +121,4 @@ public class DiscordUtils {
         }
     }
 
-    public static void runAsync(Runnable runnable) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
-    }
 }

@@ -1,8 +1,7 @@
 package de.jakomi1.betterBan.commands;
 
 import de.jakomi1.betterBan.utils.BanUtils;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import de.jakomi1.betterBan.utils.DiscordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -10,8 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.bukkit.ChatColor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,22 +24,20 @@ import static de.jakomi1.betterBan.BetterBan.isAdmin;
 public class TempBanCommand implements CommandExecutor, TabCompleter {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender,
-                             @NotNull Command command,
-                             @NotNull String label,
-                             @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender,
+                             Command command,
+                             String label,
+                             String[] args) {
         // Permission check
         if (sender instanceof Player player && !isAdmin(player)) {
-            sender.sendMessage(chatPrefix.append(Component.text("You don't have permission for this.", NamedTextColor.RED)));
+            sender.sendMessage(chatPrefix + ChatColor.RED + "You don't have permission for this.");
             return true;
         }
 
         // /tempban <Name> <Duration> [Reason...]
         if (args.length < 2) {
-            sender.sendMessage(chatPrefix.append(Component.text(
-                    "Usage: /tempban <Name> <Duration> [Reason...]. Example: 10m, 2h, 1d",
-                    NamedTextColor.RED
-            )));
+            sender.sendMessage(chatPrefix + ChatColor.RED +
+                    "Usage: /tempban <Name> <Duration> [Reason...]. Example: 10m, 2h, 1d");
             return true;
         }
 
@@ -50,16 +46,14 @@ public class TempBanCommand implements CommandExecutor, TabCompleter {
 
         // Check if player has ever joined
         if (!BanUtils.hasJoinedBefore(uuid)) {
-            sender.sendMessage(chatPrefix.append(Component.text("This player has never joined the server.", NamedTextColor.RED)));
+            sender.sendMessage(chatPrefix + ChatColor.RED + "This player has never joined the server.");
             return true;
         }
 
         // Check if player is already banned
         if (BanUtils.isBanned(uuid)) {
-            sender.sendMessage(chatPrefix.append(Component.text(
-                    (target.getName() != null ? target.getName() : uuid.toString()) + " is already banned!",
-                    NamedTextColor.RED
-            )));
+            sender.sendMessage(chatPrefix + ChatColor.RED +
+                    (target.getName() != null ? target.getName() : uuid.toString()) + " is already banned!");
             return true;
         }
 
@@ -68,13 +62,14 @@ public class TempBanCommand implements CommandExecutor, TabCompleter {
         try {
             delta = parseDuration(args[1].toLowerCase());
         } catch (IllegalArgumentException e) {
-            sender.sendMessage(chatPrefix.append(Component.text("Invalid time format. Example: 10m, 2h, 1d", NamedTextColor.RED)));
+            sender.sendMessage(chatPrefix + ChatColor.RED +
+                    "Invalid time format. Example: 10m, 2h, 1d");
             return true;
         }
 
         long endTimestamp = System.currentTimeMillis() + delta;
 
-        // Optional reason from args[2]...
+        // Optional reason
         String reason = args.length >= 3 ? String.join(" ", Arrays.copyOfRange(args, 2, args.length)).trim() : null;
 
         // Save ban in DB
@@ -85,20 +80,25 @@ public class TempBanCommand implements CommandExecutor, TabCompleter {
         String remaining = BanUtils.formatDuration(delta);
 
         // Feedback to executor
-        sender.sendMessage(chatPrefix.append(Component.text(name + " has been banned for " + remaining + ".", NamedTextColor.YELLOW)));
+        sender.sendMessage(chatPrefix + ChatColor.YELLOW +
+                name + " has been banned for " + remaining + ".");
         if (reason != null && !reason.isBlank()) {
-            sender.sendMessage(chatPrefix.append(Component.text("Reason: " + reason, NamedTextColor.GRAY)));
+            sender.sendMessage(chatPrefix + ChatColor.GRAY + "Reason: " + reason);
         }
 
-        /* Discord-Log
+        // Discord notification
         DiscordUtils.sendColoredMessage(
-                name + " was banned by " + executor + " for " + remaining + "." + (reason != null ? "\nReason: " + reason : ""),
+                name + " was banned by " + executor + " for " + remaining +
+                        (reason != null ? "\nReason: " + reason : ""),
                 0xFF0000
-        );*/
+        );
 
         // Kick if online
         if (target.isOnline() && target.getPlayer() != null) {
-            target.getPlayer().kick(BanUtils.getBanMessage(uuid));
+            target.getPlayer().kickPlayer(
+                    chatPrefix + ChatColor.RED + "You have been banned!" +
+                            (reason != null ? "\nReason: " + reason : "")
+            );
         }
 
         return true;
@@ -118,10 +118,10 @@ public class TempBanCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender,
-                                                @NotNull Command command,
-                                                @NotNull String alias,
-                                                @NotNull String[] args) {
+    public List<String> onTabComplete(CommandSender sender,
+                                      Command command,
+                                      String alias,
+                                      String[] args) {
         if (sender instanceof Player player && !isAdmin(player)) return List.of();
 
         if (args.length == 1) {

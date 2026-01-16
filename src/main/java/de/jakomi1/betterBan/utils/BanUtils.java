@@ -1,8 +1,7 @@
 package de.jakomi1.betterBan.utils;
 
 import de.jakomi1.betterBan.database.Database;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.ChatColor;
 
 import java.sql.*;
 import java.util.*;
@@ -11,7 +10,7 @@ import static de.jakomi1.betterBan.BetterBan.chatPrefix;
 
 public final class BanUtils {
 
-    private static final Component PREFIX = chatPrefix;
+    private static final String PREFIX = chatPrefix;
 
     // Cache for bans: UUID -> BanData
     private static final Map<UUID, BanData> banCache = new HashMap<>();
@@ -174,19 +173,20 @@ public final class BanUtils {
 
     // ==============================================================
 
-    public static Component getBanMessage(UUID uuid) {
+    public static String getBanMessage(UUID uuid) {
         Long end = getEnd(uuid);
         String reason = getReason(uuid);
 
-        if (end == null) return PREFIX.append(Component.text("You are not banned.", NamedTextColor.GREEN));
+        if (end == null) return PREFIX + ChatColor.GREEN + "You are not banned.";
 
         boolean permanent = end == -1;
-        Component base = permanent
-                ? PREFIX.append(Component.text("You are permanently banned!", NamedTextColor.RED))
-                : PREFIX.append(Component.text("You are banned for " + formatDuration(end - System.currentTimeMillis()) + "!", NamedTextColor.RED));
+        String base = permanent
+                ? PREFIX + ChatColor.RED + "You are permanently banned!"
+                : PREFIX + ChatColor.RED + "You are banned for " + formatDuration(end - System.currentTimeMillis()) + "!";
 
-        if (reason != null && !reason.isBlank())
-            base = base.append(Component.text("\nReason: " + reason, NamedTextColor.GRAY));
+        if (reason != null && !reason.isBlank()) {
+            base += ChatColor.GRAY + "\nReason: " + reason;
+        }
 
         return base;
     }

@@ -2,8 +2,6 @@ package de.jakomi1.betterBan.commands;
 
 import de.jakomi1.betterBan.utils.BanUtils;
 import de.jakomi1.betterBan.utils.DiscordUtils;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -11,8 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.bukkit.ChatColor;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,14 +22,15 @@ import static de.jakomi1.betterBan.BetterBan.isAdmin;
 public class UnbanCommand implements CommandExecutor, TabCompleter {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender,
-                             @NotNull Command command,
-                             @NotNull String label,
-                             @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender,
+                             Command command,
+                             String label,
+                             String[] args) {
 
         if (!(sender instanceof Player player) || isAdmin(player)) {
+
             if (args.length < 1) {
-                sender.sendMessage(chatPrefix.append(Component.text("Please provide a player name.", NamedTextColor.RED)));
+                sender.sendMessage(chatPrefix + ChatColor.RED + "Please provide a player name.");
                 return true;
             }
 
@@ -41,29 +39,37 @@ public class UnbanCommand implements CommandExecutor, TabCompleter {
 
             // Check if player is banned
             if (!BanUtils.isBanned(uuid)) {
-                sender.sendMessage(chatPrefix.append(Component.text(target.getName() + " is not banned.", NamedTextColor.RED)));
+                sender.sendMessage(chatPrefix + ChatColor.RED +
+                        (target.getName() != null ? target.getName() : uuid.toString()) + " is not banned.");
                 return true;
             }
 
             // Remove ban from DB
             BanUtils.unban(uuid);
 
-            sender.sendMessage(chatPrefix.append(Component.text(target.getName() + " has been unbanned.", NamedTextColor.GRAY)));
+            // Feedback
+            sender.sendMessage(chatPrefix + ChatColor.GRAY +
+                    (target.getName() != null ? target.getName() : uuid.toString()) + " has been unbanned.");
+
             String executor = sender instanceof Player ? sender.getName() : "the console";
-            DiscordUtils.sendColoredMessage(target.getName() + " was unbanned by " + executor + ".", 65280);
+            DiscordUtils.sendColoredMessage(
+                    (target.getName() != null ? target.getName() : uuid.toString()) +
+                            " was unbanned by " + executor + ".",
+                    0x00FF00
+            );
 
         } else {
-            sender.sendMessage(chatPrefix.append(Component.text("You don't have permission for this.", NamedTextColor.RED)));
+            sender.sendMessage(chatPrefix + ChatColor.RED + "You don't have permission for this.");
         }
 
         return true;
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender,
-                                                @NotNull Command command,
-                                                @NotNull String alias,
-                                                @NotNull String[] args) {
+    public List<String> onTabComplete(CommandSender sender,
+                                      Command command,
+                                      String alias,
+                                      String[] args) {
 
         if (sender instanceof Player player && !isAdmin(player)) return List.of();
 

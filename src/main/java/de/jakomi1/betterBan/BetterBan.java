@@ -3,24 +3,22 @@ package de.jakomi1.betterBan;
 import de.jakomi1.betterBan.commands.*;
 import de.jakomi1.betterBan.database.Database;
 import de.jakomi1.betterBan.listener.JoinListener;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.ChatColor;
 
-import javax.xml.crypto.Data;
 import java.io.File;
 import java.util.Objects;
 
 import static de.jakomi1.betterBan.utils.ConfigUtils.loadConfig;
 
 public final class BetterBan extends JavaPlugin {
-    public static final Component chatPrefix = Component.text("[", NamedTextColor.GRAY)
-            .append(Component.text("BB", NamedTextColor.DARK_RED))
-            .append(Component.text("] ", NamedTextColor.GRAY));
+
+    public static final String chatPrefix = ChatColor.GRAY + "[" + ChatColor.DARK_RED + "BB" + ChatColor.GRAY + "] ";
+
     public static Plugin plugin;
     public static File dataFolder;
     @Override

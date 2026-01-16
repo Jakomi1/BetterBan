@@ -1,9 +1,10 @@
 name: BetterBan
-version: '1.0.0'
+version: '1.1.0'
 main: de.jakomi1.betterBan.BetterBan
 api-version: '1.21'
-prefix: ServerModlist
+prefix: BetterBan
 authors: [ Jakomi1 ]
+folia-supported: true
 commands:
   ban:
     permission: betterban.ban
