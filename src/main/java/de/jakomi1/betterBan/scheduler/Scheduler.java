@@ -40,7 +40,6 @@ public final class Scheduler {
         }
         FOLIA_AVAILABLE = v;
     }
-
     public static final class TaskHandle {
         private final BukkitTask bukkitTask;
         private final Object foliaScheduledTask; // typed as Object to avoid compile-time dependency
@@ -51,16 +50,30 @@ public final class Scheduler {
         }
 
         public static TaskHandle fromBukkit(BukkitTask task) {
+            if (task == null) throw new IllegalArgumentException("task must not be null");
             return new TaskHandle(task, null);
         }
 
         public static TaskHandle fromFolia(Object task) {
+            if (task == null) throw new IllegalArgumentException("task must not be null");
             return new TaskHandle(null, task);
         }
 
         public void cancel() {
             if (bukkitTask != null) {
-                bukkitTask.cancel();
+                try {
+                    // try direct method (exists in many impls)
+                    Method m = bukkitTask.getClass().getMethod("cancel");
+                    m.invoke(bukkitTask);
+                    return;
+                } catch (NoSuchMethodException ignored) {
+                    // try scheduler cancel by task id as fallback
+                    try {
+                        int id = bukkitTask.getTaskId();
+                        Bukkit.getScheduler().cancelTask(id);
+                        return;
+                    } catch (Throwable ignore) { /* no-op */ }
+                } catch (Throwable ignored) { /* no-op */ }
             } else if (foliaScheduledTask != null) {
                 try {
                     Method m = foliaScheduledTask.getClass().getMethod("cancel");
@@ -75,7 +88,28 @@ public final class Scheduler {
         }
 
         public boolean isCancelled() {
-            if (bukkitTask != null) return bukkitTask.isCancelled();
+            if (bukkitTask != null) {
+                // try reflection first (if implementation provides it)
+                try {
+                    Method isCancelled = bukkitTask.getClass().getMethod("isCancelled");
+                    Object res = isCancelled.invoke(bukkitTask);
+                    if (res instanceof Boolean) return (Boolean) res;
+                } catch (NoSuchMethodException ignored) { /* try scheduler fallback */ }
+                catch (Throwable ignored) { /* try scheduler fallback */ }
+
+                // fallback: use scheduler queries (best-effort)
+                try {
+                    int id = bukkitTask.getTaskId();
+                    boolean running = Bukkit.getScheduler().isCurrentlyRunning(id);
+                    boolean queued = Bukkit.getScheduler().isQueued(id);
+                    // if neither running nor queued, treat as cancelled/finished
+                    return !(running || queued);
+                } catch (Throwable ignored) {
+                    // unknown -> assume not cancelled (conservative)
+                    return false;
+                }
+            }
+
             if (foliaScheduledTask != null) {
                 try {
                     Method isCancelled = foliaScheduledTask.getClass().getMethod("isCancelled");
@@ -95,16 +129,21 @@ public final class Scheduler {
 
                 return false;
             }
+
             return false;
         }
 
         @Override
         public String toString() {
-            if (bukkitTask != null) return "TaskHandle[bukkit id=" + bukkitTask.getTaskId() + "]";
+            if (bukkitTask != null) {
+                try { return "TaskHandle[bukkit id=" + bukkitTask.getTaskId() + "]"; }
+                catch (Throwable ignored) { return "TaskHandle[bukkit]"; }
+            }
             if (foliaScheduledTask != null) return "TaskHandle[folia=" + foliaScheduledTask + "]";
             return "TaskHandle[none]";
         }
     }
+
 
     private static long ticksToMillis(long ticks) {
         return Math.max(0L, ticks) * 50L; // 1 Tick = 50 ms
@@ -231,7 +270,8 @@ public final class Scheduler {
                     return TaskHandle.fromBukkit(task);
                 } catch (Throwable t) {
                     t.printStackTrace();
-                    return TaskHandle.fromBukkit(null);
+                    throw new IllegalStateException("Failed to schedule repeating task (and fallback failed)");
+
                 }
             }
         }
@@ -261,19 +301,7 @@ public final class Scheduler {
                 long foliaDelay = Math.max(1L, delay);
                 long foliaPeriod = Math.max(1L, period);
                 Object globalScheduler = Bukkit.class.getMethod("getGlobalRegionScheduler").invoke(null);
-                final AtomicInteger counter = new AtomicInteger(0);
-                Consumer<Object> consumer = (scheduledTask) -> {
-                    int idx = counter.getAndIncrement();
-                    try { runnable.run(); } catch (Throwable t) { t.printStackTrace(); }
-                    if (idx + 1 >= iterations) {
-                        try {
-                            Method cancel = scheduledTask.getClass().getMethod("cancel");
-                            cancel.invoke(scheduledTask);
-                        } catch (ReflectiveOperationException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
+                Consumer<Object> consumer = getObjectConsumer(runnable, iterations);
                 Method m = globalScheduler.getClass().getMethod("runAtFixedRate", Plugin.class, Consumer.class, long.class, long.class);
                 Object scheduledTask = m.invoke(globalScheduler, plugin, consumer, foliaDelay, foliaPeriod);
                 return TaskHandle.fromFolia(scheduledTask);
@@ -293,6 +321,23 @@ public final class Scheduler {
                 return TaskHandle.fromBukkit(task);
             }
         }
+    }
+
+    private static Consumer<Object> getObjectConsumer(Runnable runnable, long iterations) {
+        final AtomicInteger counter = new AtomicInteger(0);
+        Consumer<Object> consumer = (scheduledTask) -> {
+            int idx = counter.getAndIncrement();
+            try { runnable.run(); } catch (Throwable t) { t.printStackTrace(); }
+            if (idx + 1 >= iterations) {
+                try {
+                    Method cancel = scheduledTask.getClass().getMethod("cancel");
+                    cancel.invoke(scheduledTask);
+                } catch (ReflectiveOperationException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        return consumer;
     }
 
     public static TaskHandle runTimer(IntConsumer consumer, long delayTicks, long periodTicks, int iterations) {

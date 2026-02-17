@@ -1,8 +1,8 @@
 name: BetterBan
-version: '1.0.0'
+version: '1.2.0'
 main: de.jakomi1.betterBan.BetterBan
-api-version: '1.21'
-prefix: ServerModlist
+api-version: '1.8.8'
+prefix: BetterBan
 authors: [ Jakomi1 ]
 folia-supported: true
 commands:
@@ -16,6 +16,12 @@ commands:
     permission: betterban.unban
   banlist:
     permission: betterban.banlist
+  chatban:
+    permission: betterban.chatban
+  chatunban:
+    permission: betterban.chatunban
+  chatbanlist:
+    permission: betterban.chatbanlist
 permissions:
   betterban.ban:
     default: op
@@ -26,4 +32,10 @@ permissions:
   betterban.unban:
     default: op
   betterban.banlist:
+    default: op
+  betterban.chatbanlist:
+    default: op
+  betterban.chatban:
+    default: op
+  betterban.chatunban:
     default: op

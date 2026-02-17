@@ -3,6 +3,7 @@ package de.jakomi1.betterBan.listener;
 import de.jakomi1.betterBan.utils.BanUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -17,7 +18,7 @@ public class JoinListener implements Listener {
         //.joinMessage(chatPrefix.append(Component.text(player.getName() + " hat den Server betreten", NamedTextColor.YELLOW)));
 
     }*/
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onAsyncPreLogin(AsyncPlayerPreLoginEvent event) {
         String name = event.getName();
         UUID uuid = event.getUniqueId();

@@ -10,8 +10,6 @@ import static de.jakomi1.betterBan.BetterBan.chatPrefix;
 
 public final class BanUtils {
 
-    private static final String PREFIX = chatPrefix;
-
     // Cache for bans: UUID -> BanData
     private static final Map<UUID, BanData> banCache = new HashMap<>();
 
@@ -177,12 +175,12 @@ public final class BanUtils {
         Long end = getEnd(uuid);
         String reason = getReason(uuid);
 
-        if (end == null) return PREFIX + ChatColor.GREEN + "You are not banned.";
+        if (end == null) return chatPrefix + ChatColor.GREEN + "You are not banned.";
 
         boolean permanent = end == -1;
         String base = permanent
-                ? PREFIX + ChatColor.RED + "You are permanently banned!"
-                : PREFIX + ChatColor.RED + "You are banned for " + formatDuration(end - System.currentTimeMillis()) + "!";
+                ? chatPrefix + ChatColor.RED + "You are permanently banned!"
+                : chatPrefix + ChatColor.RED + "You are banned for " + formatDuration(end - System.currentTimeMillis()) + "!";
 
         if (reason != null && !reason.isBlank()) {
             base += ChatColor.GRAY + "\nReason: " + reason;

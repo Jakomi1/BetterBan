@@ -18,58 +18,6 @@ public class DiscordUtils {
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     /**
-     * Sends a simple message without styling to Discord (asynchronously).
-     */
-    public static void sendMessage(String content) {
-        if (content == null || content.isEmpty()) {
-            Bukkit.getLogger().warning("Discord webhook: message is empty, not sending!");
-            return;
-        }
-
-        runAsync(() -> {
-            try {
-                String escaped = content.replace("\"", "\\\"").replace("\n", "\\n");
-                String jsonPayload = "{\"content\":\"" + escaped + "\"}";
-                sendWebhook(jsonPayload);
-            } catch (Exception e) {
-                Bukkit.getLogger().severe("Error sending Discord webhook:");
-                e.printStackTrace();
-            }
-        });
-    }
-
-    public static void sendMessageWithTime(String content) {
-        String timeStamped = "[" + LocalTime.now().format(TIME_FORMAT) + "] " + content;
-        sendMessage(timeStamped);
-    }
-
-    /**
-     * Sends a styled embed message with Aqua [CRAT] title (asynchronously).
-     */
-    public static void sendStyledMessage(String content) {
-        if (content == null || content.isEmpty()) {
-            Bukkit.getLogger().warning("Discord webhook: message is empty, not sending!");
-            return;
-        }
-
-        runAsync(() -> {
-            try {
-                String escaped = content.replace("\"", "\\\"").replace("\n", "\\n");
-                String jsonPayload = "{"
-                        + "\"embeds\":[{"
-                        + "\"description\":\"[CRAT] >> " + escaped + "\","
-                        + "\"color\":65535"
-                        + "}]"
-                        + "}";
-                sendWebhook(jsonPayload);
-            } catch (Exception e) {
-                Bukkit.getLogger().severe("Error sending Discord webhook:");
-                e.printStackTrace();
-            }
-        });
-    }
-
-    /**
      * Sends an embed message with a custom color (asynchronously).
      */
     public static void sendColoredMessage(String content, int color) {
@@ -83,7 +31,7 @@ public class DiscordUtils {
                 String escaped = content.replace("\"", "\\\"").replace("\n", "\\n");
                 String jsonPayload = "{"
                         + "\"embeds\":[{"
-                        + "\"description\":\"[CRAT] >> " + escaped + "\","
+                        + "\"description\":\"" +"**"+ ConfigUtils.getPrefixRaw()+"** " + escaped + "\","
                         + "\"color\":" + color
                         + "}]"
                         + "}";

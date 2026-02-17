@@ -2,7 +2,9 @@ package de.jakomi1.betterBan;
 
 import de.jakomi1.betterBan.commands.*;
 import de.jakomi1.betterBan.database.Database;
+import de.jakomi1.betterBan.listener.ChatListener;
 import de.jakomi1.betterBan.listener.JoinListener;
+import de.jakomi1.betterBan.utils.ConfigUtils;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
@@ -17,7 +19,7 @@ import static de.jakomi1.betterBan.utils.ConfigUtils.loadConfig;
 
 public final class BetterBan extends JavaPlugin {
 
-    public static final String chatPrefix = ChatColor.GRAY + "[" + ChatColor.DARK_RED + "BB" + ChatColor.GRAY + "] ";
+    public static String chatPrefix ;
 
     public static Plugin plugin;
     public static File dataFolder;
@@ -35,6 +37,7 @@ public final class BetterBan extends JavaPlugin {
         }
         Database.init();
         registerCommands();
+        chatPrefix = ConfigUtils.getPrefixStyled();
         registerListeners();
     }
 
@@ -44,10 +47,14 @@ public final class BetterBan extends JavaPlugin {
         registerCommand("unban", new UnbanCommand(), new UnbanCommand());
         registerCommand("tempban", new TempBanCommand(), new TempBanCommand());
         registerCommand("kick", new KickCommand(), new KickCommand());
+        registerCommand("chatban", new ChatBanCommand(), new ChatBanCommand());
+        registerCommand("chatbanlist", new ChatBanListCommand(), new EmptyTabCompleter());
+        registerCommand("chatunban", new ChatUnbanCommand(), new ChatUnbanCommand());
     }
 
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(), this);
     }
 
     private void registerCommand(String command, CommandExecutor executor, TabCompleter tabCompleter) {

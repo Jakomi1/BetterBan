@@ -66,7 +66,7 @@ public class KickCommand implements CommandExecutor, TabCompleter {
 
         // Discord notification
         String discordMsg = target.getName() + " was kicked by " + executor
-                + (reason != null ? "\nReason: " + reason : "");
+                + (reason != null ? "\n*Reason: " + reason : "*");
         DiscordUtils.sendColoredMessage(discordMsg, 16753920);
 
         // Feedback to executor

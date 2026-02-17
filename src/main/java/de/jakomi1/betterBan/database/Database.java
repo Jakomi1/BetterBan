@@ -1,5 +1,8 @@
 package de.jakomi1.betterBan.database;
 
+import de.jakomi1.betterBan.utils.BanUtils;
+import de.jakomi1.betterBan.utils.ChatBanUtils;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -62,7 +65,8 @@ public final class Database {
                         applied_at TEXT NOT NULL DEFAULT (datetime('now'))
                     );
                     """);
-            de.jakomi1.betterBan.utils.BanUtils.init();
+            BanUtils.init();
+            ChatBanUtils.init();
         } catch (SQLException e) {
             e.printStackTrace();
         }
