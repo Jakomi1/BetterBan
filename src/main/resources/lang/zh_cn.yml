@@ -1,0 +1,90 @@
+messages:
+  error:
+    no_permission: "你没有权限执行此操作"
+    usage_ban: "用法：/ban <名称> [原因...]"
+    usage_tempban: "用法：/tempban <名称> <时长> [原因...] 例如：10m, 2h, 1d"
+    usage_kick: "用法：/kick <名称> [原因]"
+    usage_chatban: "用法：/chatban <名称> <时长> [原因...] 例如：10m, 2h, 1d，或 'permanent'"
+    usage_voiceban: "用法：/voiceban <名称> <时长> [原因...] 例如：10m, 2h, 1d，或 'permanent'"
+    player_required: "请提供玩家名称"
+    player_never_joined: "该玩家从未加入过服务器"
+    player_not_online: "该玩家不在线"
+    cannot_kick_self: "你不能踢自己"
+    invalid_time: "无效的时间格式 例如：10m, 2h, 1d"
+    already_banned: "已被封禁"
+    already_chat_banned: "已被禁言"
+    already_voice_banned: "已被语音禁言"
+    not_banned: "未被封禁"
+    not_chat_banned: "未被禁言"
+    not_voice_banned: "未被语音禁言"
+
+  success:
+    banned_permanent: "%player% 已被永久封禁"
+    banned_temp: "%player% 已被封禁 %duration%"
+    chatbanned: "%player% 已被禁言 (%duration%)"
+    voicebanned: "%player% 已被语音禁言 (%duration%)"
+    kicked: "%player% 被 %executor% 踢出"
+    unbanned: "已被解封"
+    chatunbanned: "已解除禁言"
+    voiceunbanned: "已解除语音禁言"
+    chatbanned_you: "你已被 %executor% 禁言 (%duration%)"
+    voicebanned_you: "你已被 %executor% 语音禁言 (%duration%)"
+    chatunbanned_you: "你已被 %executor% 解除禁言"
+    voiceunbanned_you: "你已被 %executor% 解除语音禁言"
+    reason: "-> 原因：%reason%"
+
+  kick:
+    default: "你已被踢出服务器"
+    banned: "你已被封禁"
+    reason: "原因：%reason%"
+
+  list:
+    none_banned: "没有玩家被封禁"
+    header_bans: "被封禁的玩家"
+    none_chat_banned: "没有玩家被禁言"
+    header_chat_bans: "被禁言的玩家"
+    none_voice_banned: "没有玩家被语音禁言"
+    header_voice_bans: "被语音禁言的玩家"
+    permanent: "永久"
+    reason: "-> 原因：%reason%"
+
+  ban:
+    not_banned: "你未被封禁"
+    permanent: "你已被永久封禁"
+    temp: "你被封禁 %duration%"
+    reason: "-> 原因：%reason%"
+
+  chatban:
+    not_banned: "你未被禁言"
+    permanent: "你已被永久禁言"
+    temp: "你被禁言 %duration%"
+    reason: "-> 原因：%reason%"
+
+  voiceban:
+    not_banned: "你未被语音禁言"
+    permanent: "你已被永久语音禁言"
+    temp: "你被语音禁言 %duration%"
+    reason: "-> 原因：%reason%"
+
+discord:
+  ban:
+    permanent: "**%player%** 被 **%executor%** 永久封禁"
+    temp: "**%player%** 被 **%executor%** 封禁 **%duration%**"
+    reason: "*原因：%reason%*"
+  unban:
+    default: "**%player%** 被 **%executor%** 解封"
+  kick:
+    default: "**%player%** 被 **%executor%** 踢出"
+    reason: "*原因：%reason%*"
+  chatban:
+    permanent: "**%player%** 被 **%executor%** 永久禁言"
+    temp: "**%player%** 被 **%executor%** 禁言 **%duration%**"
+    reason: "*原因：%reason%*"
+  chatunban:
+    default: "**%player%** 被 **%executor%** 解除禁言"
+  voiceban:
+    permanent: "**%player%** 被 **%executor%** 永久语音禁言"
+    temp: "**%player%** 被 **%executor%** 语音禁言 **%duration%**"
+    reason: "*原因：%reason%*"
+  voiceunban:
+    default: "**%player%** 被 **%executor%** 解除语音禁言"
