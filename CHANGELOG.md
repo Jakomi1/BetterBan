@@ -1,3 +1,6 @@
+## 1.3.1
+- fixed language bug
+
 ## 1.3.0
 - added language file support in plugins/BetterBan/lang/
 - improved config.yml data control system

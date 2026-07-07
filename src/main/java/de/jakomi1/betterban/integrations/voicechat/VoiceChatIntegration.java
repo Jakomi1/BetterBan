@@ -2,7 +2,6 @@ package de.jakomi1.betterban.integrations.voicechat;
 
 import de.jakomi1.betterban.BetterBan;
 import de.jakomi1.betterban.command.EmptyTabCompleter;
-import de.jakomi1.betterban.database.Database;
 import de.jakomi1.betterban.integrations.voicechat.command.VoiceBanCommand;
 import de.jakomi1.betterban.integrations.voicechat.command.VoiceBanListCommand;
 import de.jakomi1.betterban.integrations.voicechat.command.VoiceUnbanCommand;
@@ -12,12 +11,10 @@ import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.events.*;
-import org.bukkit.ChatColor;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.util.List;
 
-import static de.jakomi1.betterban.BetterBan.chatPrefix;
 import static de.jakomi1.betterban.BetterBan.pluginId;
 import static de.jakomi1.betterban.util.CommandUtils.registerDynamicCommand;
 import static de.jakomi1.betterban.util.PermissionUtils.registerPermission;
@@ -28,10 +25,6 @@ public class VoiceChatIntegration implements VoicechatPlugin {
 
     public static VoicechatServerApi getApi() {
         return serverApi;
-    }
-
-    public static boolean isAvailable() {
-        return serverApi != null;
     }
 
     @Override

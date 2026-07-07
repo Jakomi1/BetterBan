@@ -26,7 +26,6 @@ public final class BanUtils {
                     reason TEXT
                 );
             """);
-
             stmt.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS has_joined (
                     uuid TEXT PRIMARY KEY,

@@ -233,7 +233,7 @@ jobs:
           version: ${{ steps.cfg.outputs.VERSION }}
           version-type: release
 
-          changelog: ${{ steps.changelog.outputs.MARKDOWN }}
+          changelog: ${{ steps.changelog.outputs.HTML }}
           curseforge-changelog: ${{ steps.changelog.outputs.HTML }}
 
           loaders: ${{ steps.cfg.outputs.LOADERS }}
