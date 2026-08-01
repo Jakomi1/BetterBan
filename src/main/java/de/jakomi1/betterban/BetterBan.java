@@ -2,12 +2,8 @@ package de.jakomi1.betterban;
 
 import de.jakomi1.betterban.command.*;
 import de.jakomi1.betterban.database.Database;
-import de.jakomi1.betterban.integrations.voicechat.command.VoiceBanCommand;
-import de.jakomi1.betterban.integrations.voicechat.command.VoiceBanListCommand;
-import de.jakomi1.betterban.integrations.voicechat.command.VoiceUnbanCommand;
 import de.jakomi1.betterban.listener.ChatListener;
 import de.jakomi1.betterban.listener.JoinListener;
-import de.jakomi1.betterban.util.CommandUtils;
 import de.jakomi1.betterban.util.ConfigUtils;
 import dev.faststats.bukkit.BukkitContext;
 import org.bstats.bukkit.Metrics;
@@ -62,7 +58,7 @@ public final class BetterBan extends JavaPlugin {
 
                 if (service != null) {
                     Class<?> integrationClass =
-                            Class.forName("de.jakomi1.betterban.integrations.voicechat.VoiceChatIntegration");
+                            Class.forName("de.jakomi1.betterban.integration.voicechat.VoiceChatIntegration");
 
                     Object integration =
                             integrationClass.getDeclaredConstructor().newInstance();

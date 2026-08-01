@@ -1,7 +1,6 @@
-package de.jakomi1.betterban.integrations.voicechat.listener;
+package de.jakomi1.betterban.integration.voicechat.listener;
 
-import de.jakomi1.betterban.integrations.voicechat.VoiceChatIntegration;
-import de.jakomi1.betterban.integrations.voicechat.utils.VoiceBanUtils;
+import de.jakomi1.betterban.integration.voicechat.utils.VoiceBanUtils;
 import de.jakomi1.betterban.util.TextUtils;
 import de.maxhenkel.voicechat.api.ServerPlayer;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
@@ -10,9 +9,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
-
-import static de.jakomi1.betterban.BetterBan.chatPrefix;
-import static de.jakomi1.betterban.BetterBan.dataFolder;
 
 public class PacketListener {
     public static void onGroupEvent(JoinGroupEvent event) {

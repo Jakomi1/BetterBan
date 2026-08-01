@@ -1,12 +1,12 @@
-package de.jakomi1.betterban.integrations.voicechat;
+package de.jakomi1.betterban.integration.voicechat;
 
 import de.jakomi1.betterban.BetterBan;
 import de.jakomi1.betterban.command.EmptyTabCompleter;
-import de.jakomi1.betterban.integrations.voicechat.command.VoiceBanCommand;
-import de.jakomi1.betterban.integrations.voicechat.command.VoiceBanListCommand;
-import de.jakomi1.betterban.integrations.voicechat.command.VoiceUnbanCommand;
-import de.jakomi1.betterban.integrations.voicechat.listener.PacketListener;
-import de.jakomi1.betterban.integrations.voicechat.utils.VoiceBanUtils;
+import de.jakomi1.betterban.integration.voicechat.command.VoiceBanCommand;
+import de.jakomi1.betterban.integration.voicechat.command.VoiceBanListCommand;
+import de.jakomi1.betterban.integration.voicechat.command.VoiceUnbanCommand;
+import de.jakomi1.betterban.integration.voicechat.listener.PacketListener;
+import de.jakomi1.betterban.integration.voicechat.utils.VoiceBanUtils;
 import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;

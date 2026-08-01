@@ -1,3 +1,6 @@
+## 1.3.2
+- fixed package name
+
 ## 1.3.1
 - fixed language bug
 

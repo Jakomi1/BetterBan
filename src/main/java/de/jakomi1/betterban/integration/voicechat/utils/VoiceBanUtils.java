@@ -1,4 +1,4 @@
-package de.jakomi1.betterban.integrations.voicechat.utils;
+package de.jakomi1.betterban.integration.voicechat.utils;
 
 import de.jakomi1.betterban.database.Database;
 import de.jakomi1.betterban.util.BanUtils;

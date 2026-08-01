@@ -1,7 +1,7 @@
-package de.jakomi1.betterban.integrations.voicechat.command;
+package de.jakomi1.betterban.integration.voicechat.command;
 
-import de.jakomi1.betterban.integrations.voicechat.VoiceChatIntegration;
-import de.jakomi1.betterban.integrations.voicechat.utils.VoiceBanUtils;
+import de.jakomi1.betterban.integration.voicechat.VoiceChatIntegration;
+import de.jakomi1.betterban.integration.voicechat.utils.VoiceBanUtils;
 import de.jakomi1.betterban.util.BanUtils;
 import de.jakomi1.betterban.util.DiscordUtils;
 import de.jakomi1.betterban.util.TextUtils;
